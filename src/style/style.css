@@ -1,0 +1,877 @@
+@font-face {
+  font-family: "Minercraftory";
+  src: url("../assets/typefaces/Minercraftory.ttf");
+}
+
+* {
+  margin: 0;
+  -webkit-user-drag: none;
+  user-select: none;
+  box-sizing: border-box;
+  outline: none;
+  font-family: "Satoshi-Variable", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+body {
+  overflow: hidden;
+  height: 100vh;
+  transition: opacity .4s ease-in-out;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  background-clip: padding-box;
+  background: #0b001480;
+}
+
+*::-webkit-scrollbar-thumb {     
+  background: #290e3f70;
+}
+
+#window {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(#000000c7, #000000c7), linear-gradient(to top, #000, #00000060), url("../assets/backgrounds/chorus.png");
+  background-size: cover;
+  border-radius: 20px;
+  padding: 24px;
+  padding-bottom: 0;
+  color: #fff;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.launcherIcon {
+  width: 27px;
+}
+
+.titlebar {
+  -webkit-app-region: drag;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 24px 24px 0;
+}
+
+.sidebar {
+  position: absolute;
+  left: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.sidebarIcon {
+  opacity: .6;
+  width: 24px;
+  cursor: pointer;
+  transition: .2s;
+  color: #ffffff80;
+}
+
+.sidebarProfile {
+  padding: 30px 30px 0 0;
+  background: #00000080;
+  background-image: url("http://assets.mojang.com/SkinTemplates/steve.png");
+  width: 28.16px;
+  height: 28.16px;
+  background-size: 233px;
+  background-position: -29px -28.2px;
+  background-repeat: none;
+  image-rendering: pixelated;
+}
+
+.sidebarProfile::after {
+  content: " ";
+  position: relative;
+  top: -30.72px;
+  left: -.4px;
+  width: 31px;
+  height: 31px;
+  filter: saturate(2);
+  background-size: 257px;
+  background-image: inherit;
+  background-position: -161.5px -33px;
+  display: inline-block;
+  transition: .2s;
+  image-rendering: pixelated;
+  transform: scale(1.08);
+  overflow: hidden;
+}
+
+/* ^ these calculations were so painful to do... */
+
+.sidebarIcon:hover {
+  opacity: 1;
+  transform: scale(1.05);
+  box-shadow: 0 0 32px #00000090;
+}
+
+.sidebarProfile:hover::after {
+  transform: scale(1.1);
+}
+
+.activeIcon {
+  color: #ffffffc8;
+  opacity: 1;
+}
+
+.backIcon {
+  position: absolute;
+  bottom: 27px;
+  left: 27px;
+  transition: .2s;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.visibleBackIcon {
+  pointer-events: all;
+  opacity: .8;
+}
+
+.closeButton {
+  -webkit-app-region: no-drag;
+  opacity: .8;
+  background: #5A149750;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: .2s;
+  position: absolute;
+  right: 24px;
+  top: 24px;
+  z-index: 1;
+}
+
+.closeIcon {
+  width: 11px;
+}
+
+.closeButton:hover {
+  opacity: 1;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 16px;
+  transition: .3s ease;
+}
+
+.playButton {
+  border: 4px #1E122850 solid;
+  background: #16002940;
+  color: #ffffff90;
+  padding: 12px 12vw;
+  font-family: "Minercraftory";
+  cursor: pointer;
+  transition: .1s;
+  font-size: 1.5rem;
+}
+
+.playButton:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 32px #0c0111;
+}
+
+.playButton:active {
+  border: 4px #27133670 solid;
+}
+
+.profileInfo {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  font-weight: 300;
+  color: #ffffff90;
+  transition: .3s ease;
+  margin-top: 24px;
+}
+
+.changeProfile {
+  cursor: pointer;
+  color: #851ee0cc;
+  transition: .1s;
+}
+
+.changeProfile:hover {
+  color: #841ee0ee;
+  text-shadow: 0 0 16px #841ee060;
+}
+
+.launchSection {
+  text-align: center;
+  transition: .3s ease;
+}
+
+.tabs {
+  height: 0;
+  pointer-events: none;
+  width: 66%;
+  opacity: 0;
+  transform-origin: top;
+  transform: translateY(-100vh);
+  transition: .4s;
+  display: flex;
+  flex-direction: row;
+}
+
+.tabsEnabled .tabs {
+  height: 100%;
+  transform: translateY(0);
+  pointer-events: all;
+  opacity: 1;
+  margin-top: 48px;
+  overflow: hidden;
+}
+
+.tab {
+  opacity: 0;
+  pointer-events: none;
+  transition: .2s;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  /* -webkit-mask-image: linear-gradient(to top, transparent 0%, black 20%); */
+}
+
+.activeTab {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.tabsEnabled .launchSection .profileInfo {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(64px);
+}
+
+.profiles {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+
+.profilesTop {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.verticalDivider {
+  width: 1px;
+  height: 60%;
+  align-self: center;
+  background: #b78fdb50;
+}
+
+input {
+  border: 4px #1E122850 solid;
+  background: #16002940;
+  color: #b78fdb;
+  padding: 10px 16px;
+  transition: .2s;
+  font-size: .9rem;
+  width: 50%;
+  backdrop-filter: blur(6px);
+}
+
+input:hover, input:focus {
+  border: 4px #27133670 solid;
+}
+
+input:focus {
+  box-shadow: 0 0 32px #0c0111;
+}
+
+.button {
+  border: 4px #1E122850 solid;
+  background: #16002940;
+  color: #ffffff60;
+  padding: 10px 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: .2s;
+  font-size: .85rem;
+  backdrop-filter: blur(6px);
+}
+
+.button:hover {
+  box-shadow: 0 0 32px #0c0111;
+}
+
+.button:active {
+  border: 4px #27133670 solid;
+}
+
+.addProfile {
+  flex: 2;
+}
+
+.profilesSearch {
+  flex: 2.5;
+}
+
+.profileList {
+  width: 100%;
+  /* display: flex;
+  flex-direction: column; */
+  gap: 12px;
+  overflow-y: scroll;
+  padding-right: 6px;
+}
+
+.profile {
+  display: grid;
+  gap: 6px;
+  grid-template-columns: calc(100% - 128px) 128px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.profile:not(:first-child) {
+  margin-top: 12px;
+}
+
+.profileMeta {
+  display: flex;
+  height: 56px;
+  gap: 12px;
+  width: 100%;
+  background: #16002940;
+  border: 4px #1E122850 solid;
+  padding: 12px 16px;
+  transition: .2s;
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  align-items: center;
+  overflow: hidden;
+}
+
+.profileMeta:hover {
+  border: 4px #27133670 solid;
+}
+
+.profileMeta:active {
+  border: 4px #27133690 solid;
+}
+
+.profileName {
+  font-weight: 400;
+  color: #ffffffb0;
+}
+
+.profileVersion {
+  font-weight: 300;
+  color: #ffffff79;
+  font-size: .9rem;
+}
+
+.selectedProfile .profileMeta {
+  pointer-events: none;
+  border: 4px #3c165860 solid;
+  background: #25054140;
+}
+
+.profileActions {
+  display: flex;
+  gap: 8px;
+}
+
+.profileAction {
+  padding: 12px;
+  background: #16002940;
+  border: 4px #1E122850 solid;
+  cursor: pointer;
+  aspect-ratio: 1 / 1;
+  color: #ffffff90;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profileActionIcon {
+  width: 20px;
+  pointer-events: none;
+}
+
+.profileAction:hover {
+  border: 4px #27133670 solid;
+}
+
+.profileAction:active {
+  border: 4px #27133690 solid;
+}
+
+.disabledActions {
+  opacity: .4;
+  pointer-events: none;
+}
+
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.2s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+}
+
+.list-leave-active {
+  position: absolute;
+  width: calc(100% - 12px);
+}
+
+.loadingTab::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("../assets/icons/loading.gif");
+  background-size: 64px;
+  background-repeat: no-repeat;
+  background-position: center;
+  backdrop-filter: grayscale(.5);
+}
+
+.addProfileTab {
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 6px;
+}
+
+.addProfileInput {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.addProfileInput > input, .addProfileInput > .input {
+  width: 100%;
+  padding: 6px 8px;
+  flex: 3;
+}
+
+.addProfileInput > label {
+  color: #ffffff80;
+  padding: 10px 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: .2s;
+  font-size: .85rem;
+  width: 38%;
+  backdrop-filter: blur(6px);
+  background: #16002940;
+}
+
+.addProfileInput > input::-webkit-input-placeholder {
+  color: #ffffff30;
+}
+
+input[type="range"] {
+  appearance: none;
+  width: 100%;
+  background: #32184750;
+  outline: none;
+  opacity: 0.7;
+  transition: .2s;
+  padding: 4px 4px;
+  height: 12px;
+  border: none;
+}
+
+input[type="range"]:hover {
+  opacity: 1;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #4e078b9d;
+  cursor: pointer;
+}
+
+.addProfileTabTitle {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #ffffffb0;
+  text-transform: uppercase;
+  font-weight: 600;
+  width: 100%;
+  text-align: center;
+  line-height: 1.2;
+  background: #16002940;
+  padding: 12px 16px;
+}
+
+select {
+  border: 4px #1E122850 solid;
+  background: #16002940;
+  color: #ffffffce;
+  padding: 10px 16px;
+  transition: .2s;
+  font-size: .9rem;
+  width: 50%;
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+}
+
+select:hover, select:focus {
+  border: 4px #27133670 solid;
+}
+
+select:focus {
+  box-shadow: 0 0 32px #0c0111;
+}
+
+select::webkit-scrollbar {
+  width: 8px;
+}
+
+select::-webkit-scrollbar-track {
+  background: #242424;
+}
+
+select::-webkit-scrollbar-thumb {
+  background: #000000;
+}
+
+option {
+  color: #f2f2f2;
+  background: #111111!important;
+}
+
+.addProfileActions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+.addProfileActions > .button {
+  flex: 4;
+}
+
+.tooltip {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background: #16002940;
+  border: 4px #1E122850 solid;
+  transform: translateY(12px);
+  transition: opacity .2s, transform .2s;
+  pointer-events: none;
+  opacity: 0;
+  width: 150px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 32px #0c0111;
+}
+
+.visibleTooltip {
+  pointer-events: all;
+  opacity: 1;
+  transform: none;
+}
+
+.tooltipOption {
+  padding: 8px 12px;
+  color: #ffffff96;
+  cursor: pointer;
+  transition: .2s;
+  font-size: .9rem;
+  text-align: center;
+}
+
+.tooltipOption:not(:first-child) {
+  border-top: 4px #1E122850 solid;
+}
+
+.launching .launchSection, .launching .content, .launching .sidebar, .launching .tooltip {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.launching .progressText {
+  opacity: 1;
+}
+
+.progressText {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: .3s ease;
+  position: absolute;
+  background: url("../assets/icons/loading.gif");
+  background-size: 48px;
+  background-repeat: no-repeat;
+  background-position: center calc(100vh - 24px - 48px);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.instancesTop {
+  align-items: center;
+}
+
+.instancesSearch {
+  flex: 3;
+}
+
+.instancesList {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.instanceCard {
+  border: 4px #1E122850 solid;
+  background: #16002980;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.instanceCard:hover, .selectedInstanceCard {
+  border-color: #27133690;
+  box-shadow: 0 0 32px #0c0111;
+}
+
+.instanceHeader {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.instanceBadge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: .75rem;
+  text-transform: uppercase;
+  background: #36104f;
+  border: 1px solid #5c2b7c;
+}
+
+.instanceBadge.loader-fabric {
+  background: #132c46;
+  border-color: #2b5c8b;
+}
+
+.instanceBadge.loader-forge,
+.instanceBadge.loader-neoforge {
+  background: #3f2d10;
+  border-color: #7a580e;
+}
+
+.instanceSummary {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.instanceName {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.instanceDescription {
+  font-size: .82rem;
+  color: #ffffff90;
+}
+
+.instanceMeta {
+  font-size: .78rem;
+  color: #b8a7d5;
+}
+
+.instanceStatus {
+  font-size: .8rem;
+  text-transform: uppercase;
+  color: #ceb9ed;
+  border: 1px solid #392255;
+  padding: 4px 8px;
+  border-radius: 999px;
+  align-self: flex-start;
+}
+
+.instanceActions {
+  display: flex;
+  gap: 10px;
+}
+
+.button.ghost {
+  color: #ffffff90;
+}
+
+.button.primary {
+  background: linear-gradient(120deg, #47167a, #8c42ff);
+  color: #fff;
+  border-color: #44207a;
+}
+
+.button.disabledButton {
+  opacity: .6;
+  pointer-events: none;
+}
+
+.instanceProgress {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.instanceProgressBar {
+  flex: 1;
+  height: 6px;
+  background: #ffffff14;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.instanceProgressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #6f2de1, #ad7cff);
+}
+
+.instanceProgressLabel {
+  font-size: .85rem;
+  color: #ffffff90;
+}
+
+.instancesDisabled {
+  margin-top: 24px;
+  padding: 16px;
+  border: 4px #1E122850 solid;
+  background: #1b002c80;
+  text-align: center;
+  font-size: .9rem;
+  color: #ffffff90;
+}
+
+.instancesDisabled code {
+  font-size: .85rem;
+  color: #ceb9ed;
+}
+
+.emptyInstances {
+  padding: 24px;
+  text-align: center;
+  border: 4px #1E122850 dashed;
+  color: #ffffff60;
+  text-transform: uppercase;
+  font-size: .85rem;
+}
+
+.settings {
+  text-align: left;
+}
+
+.settingsPanel {
+  border: 4px #1E122850 solid;
+  background: #16002960;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settingsPanel h3 {
+  font-size: 1.3rem;
+  margin-bottom: -8px;
+}
+
+.settingsRow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.settingsField {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: .9rem;
+  text-transform: uppercase;
+  color: #ffffff96;
+}
+
+.settingsField input {
+  width: 100%;
+}
+
+.settingsHelper {
+  font-size: .85rem;
+  color: #ffffff75;
+}
+
+.settingsActions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.settingsStatus {
+  font-size: .88rem;
+  margin: 0;
+}
+
+.settingsStatus.error {
+  color: #ff8a8a;
+}
+
+.settingsStatus.success {
+  color: #7df5c6;
+}
+
+.settingsStatus.subtle {
+  color: #ffffff5e;
+}
+
+.settingsVersion {
+  font-family: monospace;
+  font-size: .9rem;
+  background: #f2f2f220;
+  padding: 6px 8px;
+  display: inline-block;
+}

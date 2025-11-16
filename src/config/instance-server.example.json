@@ -1,0 +1,18 @@
+{
+  "enabled": false,
+  "baseUrl": "https://your.web.server/api",
+  "instancesEndpoint": "/instances",
+  "headers": {},
+  "autoSyncMinutes": 15,
+  "downloadTimeout": 1800000,
+  "install": {
+    "targetFolder": "flexberry-instances",
+    "versionFolders": ["versions"]
+  },
+  "defaults": {
+    "memory": {
+      "min": 2048,
+      "max": 4096
+    }
+  }
+}

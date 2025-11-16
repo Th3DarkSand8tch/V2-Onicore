@@ -1,0 +1,61 @@
+{
+    "name":  "OniCore-launcher",
+    "productName":  "OniCore Launcher",
+    "version":  "1.0.0-pre.5",
+    "description":  "Lightweight and feature rich launcher for OniCore Servers",
+    "url":  "https://launcher.sakuramc.fr",
+    "user":  "",
+    "main":  "src/index.js",
+    "scripts":  {
+                    "start":  "cross-env NODE_ENV=production electron .",
+                    "dev":  "concurrently -k \"npm run dev:web\" \"npm run dev:app\"",
+                    "dev:app":  "cross-env NODE_ENV=development nodemon --watch src --exec \"electron .\"",
+                    "dev:web":  "npm --prefix web-server run dev",
+                    "build":  "cross-env NODE_ENV=production electron-builder",
+                    "dist":  "cross-env NODE_ENV=production electron-builder --dir"
+                },
+    "author":  {
+                   "name":  "Kuzey Kurtuluş",
+                   "email":  "kuzeeeyk@gmail.com"
+               },
+    "license":  "GPL-3.0",
+    "dependencies":  {
+                         "axios":  "^0.27.2",
+                         "colors":  "^1.4.0",
+                         "electron-updater":  "^6.1.8",
+                         "extract-zip":  "^2.0.1",
+                         "lowdb":  "^1.0.0",
+                         "minecraft-java-core":  "^4.1.4",
+                         "msmc":  "^3.1.0",
+                         "node-bdd":  "^2.0.4",
+                         "node-fetch":  "^2.7.0",
+                         "xml-js":  "^1.6.11"
+                     },
+    "devDependencies":  {
+                            "concurrently":  "^8.2.2",
+                            "cross-env":  "^7.0.3",
+                            "electron":  "^30.5.1",
+                            "electron-builder":  "^26.0.12",
+                            "javascript-obfuscator":  "^4.1.0",
+                            "jimp":  "^0.22.12",
+                            "nodemon":  "^3.1.2",
+                            "png2icons":  "^2.0.1"
+                        },
+    "build":  {
+                  "appId":  "com.onicore.launcher",
+                  "productName":  "OniCore Launcher",
+                  "directories":  {
+                                      "buildResources":  "build",
+                                      "output":  "release"
+                                  },
+                  "asar":  false,
+                  "files":  [
+                                "**/*",
+                                "!dist{,/**}",
+                                "!web-server{,/**}"
+                            ],
+                  "win":  {
+                              "signAndEditExecutable":  false
+                          }
+              }
+}
