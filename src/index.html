@@ -194,9 +194,9 @@
           <h3>Under Construction</h3>
         </div>
       </div>
-      <div class="launchSection">
+      <div class="launchSection" :class="{ modpacksOpen: activeTab == 'instances' }">
         <span class="playButton" @click="launch()">PLAY</span>
-        <div class="profileInfo">
+        <div class="profileInfo" v-if="activeTab != 'instances'">
           <span class="selectedProfileText">Selected {{ profiles.find(profile => profile.isSelected)?.appearance?.name || "none" }}</span>
           <span class="separator">•</span>
           <span class="changeProfile" @click="toggleTab('profiles')">change</span>

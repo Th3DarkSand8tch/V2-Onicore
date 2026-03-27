@@ -464,6 +464,18 @@ createApp({
     },
     // Launch methods
     launch() {
+      if (this.activeTab !== "instances") {
+        this.toggleTab("instances");
+        return;
+      }
+
+      if (this.instancesIntegrationEnabled) {
+        if (!this.selectedInstance)
+          return alert("Please select a modpack.");
+        this.launchInstance(this.selectedInstance);
+        return;
+      }
+
       const selectedProfile = toRaw(this.profiles.find(profile => profile.isSelected));
       const launchProfile = {
         ...toRaw(this.versions.find(version => version.id == selectedProfile.version)),

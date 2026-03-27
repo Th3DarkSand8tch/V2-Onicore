@@ -45,7 +45,7 @@
                   "appId":  "com.onicore.launcher",
                   "productName":  "OniCore Launcher",
                   "directories":  {
-                                      "buildResources":  "build",
+                                      "buildResources":  "builder",
                                       "output":  "release"
                                   },
                   "asar":  false,
@@ -55,7 +55,19 @@
                                 "!web-server{,/**}"
                             ],
                   "win":  {
-                              "signAndEditExecutable":  false
-                          }
+                              "signAndEditExecutable":  false,
+                              "icon":  "builder/assets/icons/icon.ico",
+                              "target":  [
+                                              {
+                                                  "target":  "portable",
+                                                  "arch":  [
+                                                                "x64"
+                                                            ]
+                                              }
+                                          ]
+                          },
+                  "linux":  {
+                                "icon":  "builder/assets/icons/icon.png"
+                            }
               }
 }

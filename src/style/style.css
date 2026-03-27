@@ -219,6 +219,10 @@ body {
   transition: .3s ease;
 }
 
+.launchSection.modpacksOpen {
+  transform: translateY(56px);
+}
+
 .tabs {
   height: 0;
   pointer-events: none;
@@ -259,6 +263,10 @@ body {
   opacity: 0;
   pointer-events: none;
   transform: translateY(64px);
+}
+
+.tabsEnabled .launchSection.modpacksOpen .playButton {
+  transform: translateY(20px);
 }
 
 .profiles {
